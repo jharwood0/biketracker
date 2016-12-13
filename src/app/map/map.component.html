@@ -1,11 +1,8 @@
-<div class="container">
-  <h2>Enter a device id: </h2>
-  <form class="well" (submit)="getData($event)">
-      <div class="form-group">
-          <input type="text" [(ngModel)]="deviceId" name="deviceId" class="form-control" placeholder="Search device id">
-      </div>
-  </form>
-    <sebm-google-map [latitude]="51.4744422" [longitude]="-2.59257950000005">
-        <sebm-google-map-marker *ngFor="let data of datas" [latitude]='data.latitude' [longitude]='data.longitude' [markerDraggable]=false></sebm-google-map-marker>
-    </sebm-google-map>
-</div>
+<form class="well" (submit)="getData($event)">
+    <div class="form-group">
+        <input type="text" [(ngModel)]="deviceId" name="deviceId" class="form-control" placeholder="Search device id">
+    </div>
+</form>
+<sebm-google-map [latitude]="51.4744422" [longitude]="-2.59257950000005">
+    <sebm-google-map-marker *ngFor="let data of datas" [latitude]='data.latitude' [longitude]='data.longitude' [markerDraggable]=false></sebm-google-map-marker>
+</sebm-google-map>
