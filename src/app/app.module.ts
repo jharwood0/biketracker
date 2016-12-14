@@ -9,9 +9,19 @@ import { DevicesComponent } from './devices/devices.component';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { MapComponent } from './map/map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoginComponent } from './login/login.component';
 
 // Define the routes
 const ROUTES = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'dashboard',
     component: DashboardComponent
@@ -23,7 +33,8 @@ const ROUTES = [
     AppComponent,
     DevicesComponent,
     MapComponent,
-    DashboardComponent
+    DashboardComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
