@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-//DB
-// TODO mongoose promise lib
-mongoose.connect('mongodb://admin:admin@ds119508.mlab.com:19508/biketracker');
 var Device = require('../models/device');
 var Data = require('../models/data');
 

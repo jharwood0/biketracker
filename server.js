@@ -2,40 +2,53 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
+const passport = require('passport');
 const bodyParser = require('body-parser');
-
-// Get our API routes
 const api = require('./server/routes/api');
+const auth = require('./server/routes/auth');
+const mongoose = require('mongoose');
 
-const app = express();
+var config = require('./server/config/database');
 
-// Parsers for POST data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+mongoose.connect(config.database);
+mongoose.connection.on('open', function() {
+  const app = express();
 
-// Point static path to dist
-app.use(express.static(path.join(__dirname, 'dist')));
+  // Parsers for POST data
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
 
-// Set our api routes
-app.use('/api', api);
+  // JWT setup and auth
+  app.use(passport.initialize());
+  require('./server/config/passport')(passport);
 
-// Catch all other routes and return the index file
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
+  // Point static path to dist
+  app.use(express.static(path.join(__dirname, 'dist')));
 
-/**
- * Get port from environment and store in Express.
- */
-const port = process.env.PORT || '3000';
-app.set('port', port);
+  // Set our api routes
+  app.use('/api', api);
+  app.use('/auth', auth);
 
-/**
- * Create HTTP server.
- */
-const server = http.createServer(app);
+  // Catch all other routes and return the index file
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  });
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-server.listen(port, () => console.log(`API running on localhost:${port}`));
+  /**
+   * Get port from environment and store in Express.
+   */
+  const port = process.env.PORT || '3000';
+  app.set('port', port);
+
+  /**
+   * Create HTTP server.
+   */
+  const server = http.createServer(app);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+  server.listen(port, () => console.log(`API running on localhost:${port}`));
+})
