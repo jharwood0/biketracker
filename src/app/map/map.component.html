@@ -1,8 +1,11 @@
-<form class="well" (submit)="getData($event)">
+<form class="form-inline" (submit)="getData($event)">
     <div class="form-group">
-        <input type="text" [(ngModel)]="deviceId" name="deviceId" class="form-control" placeholder="Search device id">
+        <input type="text" [(ngModel)]="deviceId" name="deviceId" class="span6 form-control" placeholder="Device Id">
+        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
-<sebm-google-map [latitude]="51.4744422" [longitude]="-2.59257950000005">
-    <sebm-google-map-marker *ngFor="let data of datas" [latitude]='data.latitude' [longitude]='data.longitude' [markerDraggable]=false></sebm-google-map-marker>
+<sebm-google-map [latitude]="focusLat" [longitude]="focusLng" [zoom]="zoom">
+    <sebm-google-map-polyline>
+        <sebm-google-map-polyline-point *ngFor="let data of datas" [latitude]="data.latitude" [longitude]="data.longitude"></sebm-google-map-polyline-point>
+    </sebm-google-map-polyline>
 </sebm-google-map>
