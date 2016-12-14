@@ -5,7 +5,6 @@ import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class DataService {
-
   constructor(private http : Http) { 
     console.log("Initalized data service");
   }

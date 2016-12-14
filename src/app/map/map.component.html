@@ -1,7 +1,14 @@
-<form class="form-inline" (submit)="getData($event)">
-    <div class="form-group">
-        <input type="text" [(ngModel)]="deviceId" name="deviceId" class="span6 form-control" placeholder="Device Id">
-        <button type="submit" class="btn btn-primary">Submit</button>
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">Select input</label>
+        <div class="controls">
+            <select (change)="getData($event.target.value)">
+                <option [value] = "0">Select Device</option>
+                <option *ngFor="let device of devices" [value]="device._id">
+                    {{device.devEUI}}
+                </option>
+            </select>
+        </div>
     </div>
 </form>
 <sebm-google-map [latitude]="focusLat" [longitude]="focusLng" [zoom]="zoom">
