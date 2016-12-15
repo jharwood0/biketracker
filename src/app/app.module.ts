@@ -11,6 +11,8 @@ import { MapComponent } from './map/map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 
+import {AuthGuardService} from './auth-guard.service'; //from here
+
 // Define the routes
 const ROUTES = [
   {
@@ -24,7 +26,8 @@ const ROUTES = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuardService]
   }
 ];
 
@@ -45,7 +48,7 @@ const ROUTES = [
     }),
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
