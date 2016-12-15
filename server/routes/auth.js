@@ -7,7 +7,7 @@ router.route('/authenticate')
   .post(function(req, res) {
     //auth user
     User.findOne({
-      name: req.body.name
+      username: req.body.username
     }, function(err, user) {
       if (err) throw err;
 
@@ -38,8 +38,8 @@ router.route('/authenticate')
 
 router.route('/addUser')
   .post(function(req, res) {
-    if ((!req.body.name) || (!req.body.password)) {
-      console.log(req.body.name);
+    if ((!req.body.username) || (!req.body.password)) {
+      console.log(req.body.username);
       console.log(req.body.password);
 
       res.json({
@@ -48,7 +48,7 @@ router.route('/addUser')
       });
     } else {
       var newUser = User({
-        name: req.body.name,
+        username: req.body.username,
         password: req.body.password
       });
 
@@ -73,7 +73,7 @@ router.route('/getInfo')
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             var token = req.headers.authorization.split(' ')[1];
             var decodedtoken = jwt.decode(token, config.secret);
-            return res.json({success: true, msg: 'hello '+decodedtoken.name});
+            return res.json({success: true, msg: 'hello '+decodedtoken.username});
         }
         else {
             return res.json({success:false, msg: 'No header'});
