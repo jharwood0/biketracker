@@ -14,7 +14,9 @@ export class LoginComponent implements OnInit {
   constructor(private authService : AuthService, private router : Router) {  }
 
   ngOnInit() {
-    this.authService.logout(); //reset login status
+    if(localStorage.getItem('currentUser')){
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   login(){

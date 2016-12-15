@@ -5,6 +5,7 @@ $(document).ready(function() {
 	/*----------------------------------*/
 
 	$('.btn-toggle-fullwidth').on('click', function() {
+		console.log("You clicked fullwidth button!");
 		if(!$('body').hasClass('layout-fullwidth')) {
 			$('body').addClass('layout-fullwidth');
 		} else {
@@ -37,16 +38,16 @@ $(document).ready(function() {
 			.addClass('icon-arrows-move-right');
 		}
 
-		/* to make sure footer on the bottom, 
+		/* to make sure footer on the bottom,
 		adjust .main height when it's shorter than .sidebar. Timeout to wait chart rendered */
 
 		setTimeout(function() {
-			
+
 			if($('.main').height() < $('.sidebar').height()) {
 				$('.main').height($('.sidebar').height());
 			}
 		}, 500);
-		
+
 	});
 
 
@@ -69,7 +70,7 @@ $(document).ready(function() {
 		});
 	}
 
-	
+
 	/*-----------------------------------/
 	/*	PANEL FUNCTIONS
 	/*----------------------------------*/
@@ -401,5 +402,3 @@ $.fn.clickToggle = function( f1, f2 ) {
 	});
 
 }
-
-

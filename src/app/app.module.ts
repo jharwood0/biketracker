@@ -11,7 +11,8 @@ import { MapComponent } from './map/map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 
-import {AuthGuardService} from './auth-guard.service'; //from here
+import {AuthGuardService} from './auth-guard.service';
+import { LogoutComponent } from './logout/logout.component';
 
 // Define the routes
 const ROUTES = [
@@ -25,10 +26,20 @@ const ROUTES = [
     component: LoginComponent
   },
   {
+    path: 'logout',
+    component: LogoutComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuardService]
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
@@ -37,7 +48,8 @@ const ROUTES = [
     DevicesComponent,
     MapComponent,
     DashboardComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
