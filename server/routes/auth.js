@@ -12,7 +12,7 @@ router.route('/authenticate')
       if (err) throw err;
 
       if (!user) {
-        res.status(403).send({
+        res.json({
           success: false,
           msg: 'Authentication failed, User not found'
         });
@@ -25,7 +25,7 @@ router.route('/authenticate')
               token: token
             });
           } else {
-            return res.status(403).send({
+            return res.json({
               success: false,
               msg: 'Authenticaton failed, wrong password.'
             });
