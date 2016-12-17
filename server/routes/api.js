@@ -2,15 +2,96 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
+var User = require('../models/user');
 var Device = require('../models/device');
-var Data = require('../models/data');
+
+/*
+GET - /api/users <- returns all users
+GET - /api/users/:_id <- returns user
+POST - /api/users <- create user
+UPDATE - /api/users/:_id <- update the user
+DELETE - /api/users/:_id <- delete the user
+*/
 
 router.get('/', function(req, res) {
-    res.json({
-        message: 'Welcome to biketracker-backend!'
-    });
+  res.json({
+    message: 'Welcome to biketracker-backend!'
+  });
 });
 
+router.route('/users')
+  .get(function(req, res) {
+    User.find(function(err, users) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(users);
+      }
+    });
+  })
+  .post(function(req, res) {
+    if ((!req.body.username) || (!req.body.password) || (!req.body.email) || (!req.body.devices)) {
+      res.json({
+        success: false,
+        msg: 'invalid json'
+      });
+    } else {
+      var error = false;
+      var errors = [];
+
+      var newUser = User({
+        "username": req.body.username,
+        "password": req.body.password,
+        "email": req.body.email,
+        "devices": req.body.devices
+      });
+
+      console.log(newUser);
+      newUser.devices.forEach(function(device) {
+        Device.findOne({
+          "devEUI": device
+        }, function(err, foundDevice) {
+          if (foundDevice == null) {
+            console.log("Creating device");
+            var newDevice = Device({
+              "devEUI": device,
+              "uplink": []
+            });
+            newDevice.save(function(err, newDevice) {
+              if (err) {
+                error = true;
+                errors.push("Could not create device");
+              }
+            });
+          }
+        });
+      });
+      if(error){
+        res.json({
+          success: false,
+          msg: 'Failed to create user',
+          err: err
+        })
+      }else{
+        newUser.save(function(err, newUser) {
+          if (err) {
+            res.json({
+              success: false,
+              msg: 'Failed to create user',
+              err: err
+            })
+          } else {
+            res.json({
+              success: true,
+              msg: 'Successfully saved'
+            });
+          }
+        });
+      }
+    }
+  });
+
+/*
 router.route('/devices')
     .post(function(req, res) {
         var device = new Device(); // create a new instance of the Device model
@@ -89,5 +170,6 @@ router.get('/datas', function(req, res) {
         res.json(locations);
     });
 });
+*/
 
 module.exports = router;
