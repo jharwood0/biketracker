@@ -66,5 +66,9 @@ var DeviceSchema = new Schema({
     required : false
   }
 });
-
-module.exports = mongoose.model('Device', DeviceSchema);
+//problem here todo
+module.exports = {
+    Device: DeviceSchema,
+    Uplink: UplinkSchema
+};
+//module.exports = mongoose.model('Device', DeviceSchema);

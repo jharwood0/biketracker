@@ -11,6 +11,10 @@ GET - /api/users/:_id <- returns user
 POST - /api/users <- create user
 UPDATE - /api/users/:_id <- update the user
 DELETE - /api/users/:_id <- delete the user
+GET - /api/devices <- returns all devices
+GET - /api/devices/:_id <- returns the device
+POST - /api/devices <- create device
+POST - /api/devices/:_id <- add uplink data
 */
 
 router.get('/', function(req, res) {
@@ -66,13 +70,13 @@ router.route('/users')
           }
         });
       });
-      if(error){
+      if (error) {
         res.json({
           success: false,
           msg: 'Failed to create user',
           err: err
         })
-      }else{
+      } else {
         newUser.save(function(err, newUser) {
           if (err) {
             res.json({
@@ -90,6 +94,95 @@ router.route('/users')
       }
     }
   });
+
+router.route('/users/:id')
+  .get(function(req, res) {
+    User.findById(req.params.id, function(err, user) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(user);
+      }
+    });
+  })
+  .put(function(req, res){
+    res.json({
+      msg:"Not implemented"
+    });
+  })
+  .delete(function(req, res){
+    res.json({
+      msg:"Not Implemented"
+    });
+  });
+
+router.route('/devices')
+      .get(function(req, res){
+        Device.Device.find(function(err, devices){
+          if(err){
+            res.send(err);
+          }else{
+            res.json(devices);
+          }
+        })
+      })
+      .post(function(req, res){
+        if(!req.body.devEUI){
+          res.send({
+            msg:"incorrect json"
+          });
+        }else{
+          var uplink;
+          if(!req.body.uplink){
+            uplink = req.body.uplink;
+          }else{
+            uplink = [];
+          }
+          var device = Device({
+            "devEUI" : req.body.devEUI,
+            "uplink" : uplink
+          });
+          device.save(function(err, newDevice){
+            if(err){
+              res.send(err);
+            }else{
+              res.json({
+                msg: "created device"
+              })
+            }
+          })
+        }
+      })
+
+router.route('/devices/:id')
+      .get(function(req, res){
+        Device.Device.findById(req.params.id, function(err, device) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(device);
+          }
+        });
+      })
+      .post(function(req, res){
+        //adding an uplink
+        if(!req.body.devEUI){
+          res.send({"msg":"Could not find devEUI"});
+        }
+        var uplink = Device.uplink({
+          "devEUI":req.body.devEUI
+        });
+        uplink.save(function(err, uplink){
+          if(err){
+            res.send(err);
+          }else{
+            res.json({
+              msg:"Successful"
+            });
+          }
+        });
+
+      })
 
 /*
 router.route('/devices')
