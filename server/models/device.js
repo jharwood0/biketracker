@@ -55,6 +55,7 @@ var UplinkSchema = new Schema({
   },
 });
 
+var Uplink = mongoose.model('Uplink', UplinkSchema);
 
 var DeviceSchema = new Schema({
   devEUI: {
@@ -66,9 +67,10 @@ var DeviceSchema = new Schema({
     required : false
   }
 });
-//problem here todo
+
+var Device = mongoose.model('Device', DeviceSchema);
+
 module.exports = {
-    Device: DeviceSchema,
-    Uplink: UplinkSchema
-};
-//module.exports = mongoose.model('Device', DeviceSchema);
+	Device:Device,
+	Uplink:Uplink
+}

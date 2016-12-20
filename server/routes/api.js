@@ -3,12 +3,14 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 var User = require('../models/user');
-var Device = require('../models/device');
+var DeviceModels = require('../models/device');
+var Device = DeviceModels.Device;
+var Uplink = DeviceModels.Uplink;
 
 /*
-GET - /api/users <- returns all users
-GET - /api/users/:_id <- returns user
-POST - /api/users <- create user
+GET - /api/users <- returns all users [*]
+GET - /api/users/:_id <- returns user [*]
+POST - /api/users <- create user [*]
 UPDATE - /api/users/:_id <- update the user
 DELETE - /api/users/:_id <- delete the user
 GET - /api/devices <- returns all devices
@@ -105,164 +107,160 @@ router.route('/users/:id')
       }
     });
   })
-  .put(function(req, res){
+  .put(function(req, res) {
     res.json({
-      msg:"Not implemented"
+      msg: "Not implemented"
     });
   })
-  .delete(function(req, res){
+  .delete(function(req, res) {
     res.json({
-      msg:"Not Implemented"
+      msg: "Not Implemented"
     });
   });
 
 router.route('/devices')
-      .get(function(req, res){
-        Device.Device.find(function(err, devices){
-          if(err){
-            res.send(err);
-          }else{
-            res.json(devices);
-          }
-        })
-      })
-      .post(function(req, res){
-        if(!req.body.devEUI){
-          res.send({
-            msg:"incorrect json"
-          });
-        }else{
-          var uplink;
-          if(!req.body.uplink){
-            uplink = req.body.uplink;
-          }else{
-            uplink = [];
-          }
-          var device = Device({
-            "devEUI" : req.body.devEUI,
-            "uplink" : uplink
-          });
-          device.save(function(err, newDevice){
-            if(err){
-              res.send(err);
-            }else{
-              res.json({
-                msg: "created device"
-              })
-            }
+  .get(function(req, res) {
+    Device.find(function(err, devices) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(devices);
+      }
+    })
+  })
+  .post(function(req, res) {
+    if (!req.body.devEUI) {
+      res.send({
+        msg: "incorrect json"
+      });
+    } else {
+      var uplink;
+      if (!req.body.uplink) {
+        uplink = req.body.uplink;
+      } else {
+        uplink = [];
+      }
+      var device = Device({
+        "devEUI": req.body.devEUI,
+        "uplink": uplink
+      });
+      device.save(function(err, newDevice) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.json({
+            msg: "created device"
           })
         }
       })
+    }
+  })
 
 router.route('/devices/:id')
-      .get(function(req, res){
-        Device.Device.findById(req.params.id, function(err, device) {
-          if (err) {
-            res.send(err);
-          } else {
-            res.json(device);
-          }
-        });
-      })
-      .post(function(req, res){
-        //adding an uplink
-        if(!req.body.devEUI){
-          res.send({"msg":"Could not find devEUI"});
-        }
-        var uplink = Device.uplink({
-          "devEUI":req.body.devEUI
-        });
-        uplink.save(function(err, uplink){
-          if(err){
-            res.send(err);
-          }else{
-            res.json({
-              msg:"Successful"
-            });
-          }
-        });
-
-      })
-
-/*
-router.route('/devices')
-    .post(function(req, res) {
-        var device = new Device(); // create a new instance of the Device model
-        device.devEUI = req.body.devEUI; // set the devices devEUI (comes from the request)
-        var location = new Location();
-        location.device = device._id;
-        location.longitude = -2;
-        location.latitude = -1;
-        location.save(function(errr){});
-
-        device.save(function(err) {
-            if (err) {
+  .get(function(req, res) {
+    Device.findById(req.params.id, function(err, device) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(device);
+      }
+    });
+  })
+  .post(function(req, res) {
+      Device.findById(req.params.id, function(err, device) {
+          var uplink = Uplink(req.body);
+          device.uplink.push(uplink);
+          device.save(function(err, device) {
+              if (err) {
                 res.send(err);
-            } else {
+              } else {
                 res.json({
-                    message: 'Device created!'
+                  msg: "Successful"
                 });
-            }
-        });
-    })
-    .get(function(req, res) {
-        Device.find(function(err, devices) {
-            if (err)
-                res.send(err);
-            res.json(devices);
-        });
+              }
+          });
+      });
     });
 
-router.route('/devices/:device_id')
-    .get(function(req, res) {
-        Device.findById(req.params.device_id, function(err, device) {
-            if (err)
-                res.send(err);
-            res.json(device);
-        });
-    })
-    .put(function(req, res) {
-        Device.findById(req.params.devEUI, function(err, device) {
-            if (err)
-                res.send(err);
-            device.devEUI = req.body.devEUI;
+    /*
+    router.route('/devices')
+        .post(function(req, res) {
+            var device = new Device(); // create a new instance of the Device model
+            device.devEUI = req.body.devEUI; // set the devices devEUI (comes from the request)
+            var location = new Location();
+            location.device = device._id;
+            location.longitude = -2;
+            location.latitude = -1;
+            location.save(function(errr){});
+
             device.save(function(err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json({
+                        message: 'Device created!'
+                    });
+                }
+            });
+        })
+        .get(function(req, res) {
+            Device.find(function(err, devices) {
+                if (err)
+                    res.send(err);
+                res.json(devices);
+            });
+        });
+
+    router.route('/devices/:device_id')
+        .get(function(req, res) {
+            Device.findById(req.params.device_id, function(err, device) {
+                if (err)
+                    res.send(err);
+                res.json(device);
+            });
+        })
+        .put(function(req, res) {
+            Device.findById(req.params.devEUI, function(err, device) {
+                if (err)
+                    res.send(err);
+                device.devEUI = req.body.devEUI;
+                device.save(function(err) {
+                    if (err)
+                        res.send(err);
+                    res.json({
+                        message: 'Device updated!'
+                    });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Device.remove({
+                _id: req.params.devEUI
+            }, function(err, device) {
                 if (err)
                     res.send(err);
                 res.json({
-                    message: 'Device updated!'
+                    message: 'Successfully deleted'
                 });
             });
+    });
 
-        });
-    })
-    .delete(function(req, res) {
-        Device.remove({
-            _id: req.params.devEUI
-        }, function(err, device) {
-            if (err)
-                res.send(err);
-            res.json({
-                message: 'Successfully deleted'
+    router.route('/devices/:device_id/datas')
+        .get(function(req, res){
+            Data.find({}).where('device', req.params.device_id).exec(function(err, locations){
+                res.json(locations);
             });
         });
-});
 
-router.route('/devices/:device_id/datas')
-    .get(function(req, res){
-        Data.find({}).where('device', req.params.device_id).exec(function(err, locations){
+    router.get('/datas', function(req, res) {
+        Data.find(function(err, locations){
+            if(err){
+                res.send(err);
+            }
             res.json(locations);
         });
     });
+    */
 
-router.get('/datas', function(req, res) {
-    Data.find(function(err, locations){
-        if(err){
-            res.send(err);
-        }
-        res.json(locations);
-    });
-});
-*/
-
-module.exports = router;
+    module.exports = router;
