@@ -7,9 +7,11 @@ import { DevicesService } from '../devices.service';
   styleUrls: ['./devices.component.css']
 })
 export class DevicesComponent implements OnInit {
+  devices = [];
   constructor(private devicesService : DevicesService) {  }
 
   ngOnInit() {
+    this.devices = this.devicesService.getDevices();
     /*this.devicesService.getDevices()
         .subscribe(devices => {
           this.devices = devices;

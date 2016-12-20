@@ -40,6 +40,7 @@ export class AuthService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+// split getUser into user service instead of in auth...
   getUser(){
     // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.token});
@@ -56,6 +57,10 @@ export class AuthService {
   logout() {
     this.token = null;
     window.localStorage.clear();
+  }
+
+  decodeToken(){
+    return this.jwtHelper.decodeToken(this.token);
   }
 
 }

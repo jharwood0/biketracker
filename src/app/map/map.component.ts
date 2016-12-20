@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DevicesService } from '../devices.service';
-import { AuthHttp, JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: 'app-map',
@@ -13,37 +12,34 @@ export class MapComponent implements OnInit {
   focusLat: number = 52.561928;
   focusLng: number = -1.464854;
   zoom: number = 6;
-  user : any;
-  jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private devicesService: DevicesService) {
-  }
+  constructor(private devicesService: DevicesService) { }
 
   ngOnInit() {
-
+    this.devices = this.devicesService.getDevices();
   }
 
-  getData(deviceId) {
+  getData(deviceId) { //todo make sure this is acutal id
     event.preventDefault();
-    /*
     if (deviceId != "0") {
       console.log("Fetching data");
-      this.dataService.getAllData(deviceId)
+      this.devicesService.getDevice(deviceId)
+      //this.dataService.getAllData(deviceId)
         .subscribe(datas => {
           console.log("Updating data");
-          this.datas = datas;
+          this.datas = datas.uplink;
+          console.log(this.datas);
           var i = datas.length - 1;
           if (i < 0) {
             console.log("Nowhere to focus..");
           } else {
-            this.focusLat = datas[datas.length - 1].latitude;
-            this.focusLng = datas[datas.length - 1].longitude;
+            this.focusLat = this.datas[this.datas.length - 1].latitude;
+            this.focusLng = this.datas[this.datas.length - 1].longitude;
             this.zoom = 20;
           }
 
         });
     }
-    */
   }
 
 }
