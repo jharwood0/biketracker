@@ -7,7 +7,7 @@ export class AuthGuardService {
   constructor(private router : Router) { }
 
   canActivate(){
-    if(localStorage.getItem('currentUser')){
+    if(localStorage.getItem('auth_token')){
       return true;
     }
     this.router.navigate(['/login']);

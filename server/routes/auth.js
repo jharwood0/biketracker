@@ -22,7 +22,8 @@ router.route('/authenticate')
             var token = jwt.encode(user, config.secret);
             res.json({
               success: true,
-              token: token
+              token: token,
+              user: user
             });
           } else {
             return res.json({
@@ -34,38 +35,6 @@ router.route('/authenticate')
       }
 
     })
-  });
-
-router.route('/addUser')
-  .post(function(req, res) {
-    if ((!req.body.username) || (!req.body.password)) {
-      console.log(req.body.username);
-      console.log(req.body.password);
-
-      res.json({
-        success: false,
-        msg: 'Enter all values'
-      });
-    } else {
-      var newUser = User({
-        username: req.body.username,
-        password: req.body.password
-      });
-
-      newUser.save(function(err, newUser) {
-        if (err) {
-          res.json({
-            success: false,
-            msg: 'Failed to save'
-          })
-        } else {
-          res.json({
-            success: true,
-            msg: 'Successfully saved'
-          });
-        }
-      })
-    }
   });
 
 router.route('/getInfo')

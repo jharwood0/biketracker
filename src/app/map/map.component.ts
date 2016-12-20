@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
 import { DevicesService } from '../devices.service';
+import { AuthHttp, JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: 'app-map',
@@ -13,18 +13,19 @@ export class MapComponent implements OnInit {
   focusLat: number = 52.561928;
   focusLng: number = -1.464854;
   zoom: number = 6;
+  user : any;
+  jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private dataService: DataService, private devicesService: DevicesService) { }
+  constructor(private devicesService: DevicesService) {
+  }
 
   ngOnInit() {
-    this.devicesService.getDevices()
-      .subscribe(devices => {
-        this.devices = devices;
-      });
+
   }
 
   getData(deviceId) {
     event.preventDefault();
+    /*
     if (deviceId != "0") {
       console.log("Fetching data");
       this.dataService.getAllData(deviceId)
@@ -42,6 +43,7 @@ export class MapComponent implements OnInit {
 
         });
     }
+    */
   }
 
 }

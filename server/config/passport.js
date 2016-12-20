@@ -13,7 +13,7 @@ module.exports = function(passport) {
                 return done(err, false);
             }
             if (user) {
-                return done(null, user);
+                return done(null, safeUser);
             } else {
                 return done(null, false);
             }

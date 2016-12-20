@@ -14,7 +14,7 @@ var UserSchema = new Schema({
       required: true
     },
     devices:[{
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true
     }],
     password: {

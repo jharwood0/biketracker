@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
+import { JwtHelper } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
   public token: string;
+  jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(private http: Http) {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var currentUser = JSON.parse(localStorage.getItem('auth_token'));
     this.token = currentUser && currentUser.token;
   }
 
@@ -26,7 +28,7 @@ export class AuthService {
           this.token = token;
 
           // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
+          localStorage.setItem('auth_token', JSON.stringify({token: token}));
 
           // return true to indicate successful login
           return true;
@@ -36,6 +38,19 @@ export class AuthService {
         }
       })
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getUser(){
+    // add authorization header with jwt token
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.token});
+        let options = new RequestOptions({ headers: headers });
+
+        let currentUser = this.jwtHelper.decodeToken(this.token);
+        // get users from api
+        console.log("decoded token: ");
+        console.log(currentUser);
+        return this.http.get('/api/users/'+currentUser._id, options)
+            .map(res => res.json());
   }
 
   logout() {

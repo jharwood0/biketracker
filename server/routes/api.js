@@ -17,6 +17,8 @@ GET - /api/devices <- returns all devices
 GET - /api/devices/:_id <- returns the device
 POST - /api/devices <- create device
 POST - /api/devices/:_id <- add uplink data
+
+POST - /api/authenticate/
 */
 
 router.get('/', function(req, res) {
@@ -36,65 +38,21 @@ router.route('/users')
     });
   })
   .post(function(req, res) {
-    if ((!req.body.username) || (!req.body.password) || (!req.body.email) || (!req.body.devices)) {
-      res.json({
-        success: false,
-        msg: 'invalid json'
-      });
-    } else {
-      var error = false;
-      var errors = [];
-
-      var newUser = User({
-        "username": req.body.username,
-        "password": req.body.password,
-        "email": req.body.email,
-        "devices": req.body.devices
-      });
-
-      console.log(newUser);
-      newUser.devices.forEach(function(device) {
-        Device.findOne({
-          "devEUI": device
-        }, function(err, foundDevice) {
-          if (foundDevice == null) {
-            console.log("Creating device");
-            var newDevice = Device({
-              "devEUI": device,
-              "uplink": []
-            });
-            newDevice.save(function(err, newDevice) {
-              if (err) {
-                error = true;
-                errors.push("Could not create device");
-              }
-            });
-          }
-        });
-      });
-      if (error) {
+    var newUser = User(req.body);
+    newUser.save(function(err, newUser) {
+      if (err) {
         res.json({
           success: false,
           msg: 'Failed to create user',
           err: err
         })
       } else {
-        newUser.save(function(err, newUser) {
-          if (err) {
-            res.json({
-              success: false,
-              msg: 'Failed to create user',
-              err: err
-            })
-          } else {
-            res.json({
-              success: true,
-              msg: 'Successfully saved'
-            });
-          }
+        res.json({
+          success: true,
+          msg: 'Successfully saved'
         });
       }
-    }
+    });
   });
 
 router.route('/users/:id')
@@ -167,100 +125,100 @@ router.route('/devices/:id')
     });
   })
   .post(function(req, res) {
-      Device.findById(req.params.id, function(err, device) {
-          var uplink = Uplink(req.body);
-          device.uplink.push(uplink);
-          device.save(function(err, device) {
-              if (err) {
-                res.send(err);
-              } else {
-                res.json({
-                  msg: "Successful"
-                });
-              }
+    Device.findById(req.params.id, function(err, device) {
+      var uplink = Uplink(req.body);
+      device.uplink.push(uplink);
+      device.save(function(err, device) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.json({
+            msg: "Successful"
           });
+        }
       });
     });
+  });
 
-    /*
-    router.route('/devices')
-        .post(function(req, res) {
-            var device = new Device(); // create a new instance of the Device model
-            device.devEUI = req.body.devEUI; // set the devices devEUI (comes from the request)
-            var location = new Location();
-            location.device = device._id;
-            location.longitude = -2;
-            location.latitude = -1;
-            location.save(function(errr){});
+/*
+router.route('/devices')
+    .post(function(req, res) {
+        var device = new Device(); // create a new instance of the Device model
+        device.devEUI = req.body.devEUI; // set the devices devEUI (comes from the request)
+        var location = new Location();
+        location.device = device._id;
+        location.longitude = -2;
+        location.latitude = -1;
+        location.save(function(errr){});
 
-            device.save(function(err) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json({
-                        message: 'Device created!'
-                    });
-                }
-            });
-        })
-        .get(function(req, res) {
-            Device.find(function(err, devices) {
-                if (err)
-                    res.send(err);
-                res.json(devices);
-            });
-        });
-
-    router.route('/devices/:device_id')
-        .get(function(req, res) {
-            Device.findById(req.params.device_id, function(err, device) {
-                if (err)
-                    res.send(err);
-                res.json(device);
-            });
-        })
-        .put(function(req, res) {
-            Device.findById(req.params.devEUI, function(err, device) {
-                if (err)
-                    res.send(err);
-                device.devEUI = req.body.devEUI;
-                device.save(function(err) {
-                    if (err)
-                        res.send(err);
-                    res.json({
-                        message: 'Device updated!'
-                    });
+        device.save(function(err) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json({
+                    message: 'Device created!'
                 });
+            }
+        });
+    })
+    .get(function(req, res) {
+        Device.find(function(err, devices) {
+            if (err)
+                res.send(err);
+            res.json(devices);
+        });
+    });
 
-            });
-        })
-        .delete(function(req, res) {
-            Device.remove({
-                _id: req.params.devEUI
-            }, function(err, device) {
+router.route('/devices/:device_id')
+    .get(function(req, res) {
+        Device.findById(req.params.device_id, function(err, device) {
+            if (err)
+                res.send(err);
+            res.json(device);
+        });
+    })
+    .put(function(req, res) {
+        Device.findById(req.params.devEUI, function(err, device) {
+            if (err)
+                res.send(err);
+            device.devEUI = req.body.devEUI;
+            device.save(function(err) {
                 if (err)
                     res.send(err);
                 res.json({
-                    message: 'Successfully deleted'
+                    message: 'Device updated!'
                 });
             });
-    });
 
-    router.route('/devices/:device_id/datas')
-        .get(function(req, res){
-            Data.find({}).where('device', req.params.device_id).exec(function(err, locations){
-                res.json(locations);
+        });
+    })
+    .delete(function(req, res) {
+        Device.remove({
+            _id: req.params.devEUI
+        }, function(err, device) {
+            if (err)
+                res.send(err);
+            res.json({
+                message: 'Successfully deleted'
             });
         });
+});
 
-    router.get('/datas', function(req, res) {
-        Data.find(function(err, locations){
-            if(err){
-                res.send(err);
-            }
+router.route('/devices/:device_id/datas')
+    .get(function(req, res){
+        Data.find({}).where('device', req.params.device_id).exec(function(err, locations){
             res.json(locations);
         });
     });
-    */
 
-    module.exports = router;
+router.get('/datas', function(req, res) {
+    Data.find(function(err, locations){
+        if(err){
+            res.send(err);
+        }
+        res.json(locations);
+    });
+});
+*/
+
+module.exports = router;
