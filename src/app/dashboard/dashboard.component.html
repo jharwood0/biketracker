@@ -1,6 +1,7 @@
-<!-- WRAPPER -->
-<div id="wrapper">
-  <!-- SIDEBAR -->
+
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- SIDEBAR -->
 		<div class="sidebar">
 			<div class="brand">
 				<a href="index.html"><img src="assets/img/logo.png" alt="Klorofil Logo" class="img-responsive logo"></a>
@@ -8,46 +9,55 @@
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="index.html" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
+						<li><a href="/dashboard" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
 					</ul>
 				</nav>
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
-  <!-- MAIN -->
-  <div class="main">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div id="navbar-menu" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span>{{user.username}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-              <ul class="dropdown-menu">
-                <li><a href=""><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
-                <li><a href=""><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
-                <li><a href=""><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
-                <li><a href="logout"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
-              </ul>
-            </li>
-          </ul>
+		<!-- MAIN -->
+		<div class="main">
+			<!-- NAVBAR -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-btn">
+						<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+					</div>
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-menu">
+							<span class="sr-only">Toggle Navigation</span>
+							<i class="fa fa-bars icon-nav"></i>
+						</button>
+					</div>
+					<div id="navbar-menu" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span>{{user.username}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+								<ul class="dropdown-menu">
+									<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
+									<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
+									<li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
+									<li><a href="/logout"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<!-- END NAVBAR -->
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+						<app-devices></app-devices>
+						<app-map></app-map>
         </div>
-      </div>
-    </nav>
-    <!-- END NAVBAR -->
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-      <div class="container-fluid">
-        <app-devices></app-devices>
-        <app-map></app-map>
-      </div>
-      <!-- END MAIN CONTENT -->
-      <footer>
-        <div class="container-fluid">
-          <p class="copyright">&copy; 2016. Designed &amp; Crafted by <a href="https://themeineed.com">The Develovers</a></p>
-        </div>
-      </footer>
-    </div>
-    <!-- END MAIN -->
-  </div>
-  <!-- END WRAPPER -->
+			</div>
+			<!-- END MAIN CONTENT -->
+			<footer>
+				<div class="container-fluid">
+					<p class="copyright">&copy; 2016. Designed &amp; Crafted by <a href="https://themeineed.com">The Develovers</a></p>
+				</div>
+			</footer>
+		</div>
+		<!-- END MAIN -->
+	</div>
