@@ -12,7 +12,8 @@ export class MapComponent implements OnInit {
   focusLat: number = 52.561928;
   focusLng: number = -1.464854;
   zoom: number = 6;
-  mapStyle :any[] = [{"featureType":"landscape","stylers":[{"hue":"#FFBB00"},{"saturation":43.400000000000006},{"lightness":37.599999999999994},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#FFC200"},{"saturation":-61.8},{"lightness":45.599999999999994},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":51.19999999999999},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":52},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#0078FF"},{"saturation":-13.200000000000003},{"lightness":2.4000000000000057},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#00FF6A"},{"saturation":-1.0989010989011234},{"lightness":11.200000000000017},{"gamma":1}]}];
+  mapStyle: any[] = [{ "featureType": "landscape", "stylers": [{ "hue": "#FFBB00" }, { "saturation": 43.400000000000006 }, { "lightness": 37.599999999999994 }, { "gamma": 1 }] }, { "featureType": "road.highway", "stylers": [{ "hue": "#FFC200" }, { "saturation": -61.8 }, { "lightness": 45.599999999999994 }, { "gamma": 1 }] }, { "featureType": "road.arterial", "stylers": [{ "hue": "#FF0300" }, { "saturation": -100 }, { "lightness": 51.19999999999999 }, { "gamma": 1 }] }, { "featureType": "road.local", "stylers": [{ "hue": "#FF0300" }, { "saturation": -100 }, { "lightness": 52 }, { "gamma": 1 }] }, { "featureType": "water", "stylers": [{ "hue": "#0078FF" }, { "saturation": -13.200000000000003 }, { "lightness": 2.4000000000000057 }, { "gamma": 1 }] }, { "featureType": "poi", "stylers": [{ "hue": "#00FF6A" }, { "saturation": -1.0989010989011234 }, { "lightness": 11.200000000000017 }, { "gamma": 1 }] }];
+  sub: any;
 
   constructor(private devicesService: DevicesService) { }
 
@@ -22,15 +23,19 @@ export class MapComponent implements OnInit {
 
   getData(deviceId) { //todo make sure this is acutal id
     event.preventDefault();
+    if (this.sub != null) {
+      this.sub.unsubscribe();
+    }
+    this.datas = [];
+
     if (deviceId != "0") {
       console.log("Fetching data");
-      this.devicesService.getDevice(deviceId)
-      //this.dataService.getAllData(deviceId)
+      this.sub = this.devicesService.getDevice(deviceId)
         .subscribe(datas => {
           console.log("Updating data");
           this.datas = datas.uplink;
           console.log(this.datas);
-          var i = datas.length - 1;
+          var i = this.datas.length - 1;
           if (i < 0) {
             console.log("Nowhere to focus..");
           } else {
