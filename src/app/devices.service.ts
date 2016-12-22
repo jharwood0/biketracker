@@ -9,7 +9,6 @@ import { AuthService } from './auth.service';
 export class DevicesService {
 
   constructor(private http:Http, private authService: AuthService){
-    console.log('Initialized Device Service');
   }
 
   getDevices(){
@@ -21,8 +20,6 @@ export class DevicesService {
             userDevices.push(device);
           });
     }
-    console.log("Device = ");
-    console.log(userDevices);
     return userDevices;
   }
   //todo add jwt token

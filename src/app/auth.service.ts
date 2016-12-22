@@ -48,8 +48,6 @@ export class AuthService {
 
         let currentUser = this.jwtHelper.decodeToken(this.token);
         // get users from api
-        console.log("decoded token: ");
-        console.log(currentUser);
         return this.http.get('/api/users/'+currentUser._id, options)
             .map(res => res.json());
   }

@@ -5,7 +5,6 @@ $(document).ready(function() {
 	/*----------------------------------*/
 
 	$('.btn-toggle-fullwidth').on('click', function() {
-		console.log("You clicked fullwidth button!");
 		if(!$('body').hasClass('layout-fullwidth')) {
 			$('body').addClass('layout-fullwidth');
 		} else {

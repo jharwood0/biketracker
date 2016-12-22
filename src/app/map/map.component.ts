@@ -29,12 +29,9 @@ export class MapComponent implements OnInit {
     this.datas = [];
 
     if (deviceId != "0") {
-      console.log("Fetching data");
       this.sub = this.devicesService.getDevice(deviceId)
         .subscribe(datas => {
-          console.log("Updating data");
           this.datas = datas.uplink;
-          console.log(this.datas);
           var i = this.datas.length - 1;
           if (i < 0) {
             console.log("Nowhere to focus..");
