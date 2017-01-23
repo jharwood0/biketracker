@@ -139,6 +139,25 @@ router.route('/devices/:id')
       });
     });
   });
+  router.route('/devices/:id/uplink')
+    .delete(function(req, res) {
+      Device.findById(req.params.id, function(err, device) {
+        if (err) {
+          res.send(err);
+        } else {
+          device.uplink = []
+          device.save(function(err, device) {
+            if (err) {
+              res.send(err);
+            } else {
+              res.json({
+                msg: "Successful"
+              });
+            }
+          });
+        }
+      });
+    });
 
 /*
 router.route('/devices')

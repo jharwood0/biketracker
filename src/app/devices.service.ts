@@ -22,6 +22,13 @@ export class DevicesService {
     }
     return userDevices;
   }
+
+  //todo add jwt token
+  deleteUplink(deviceId : string){
+      this.http.delete('/api/devices/'+deviceId+'/uplink')
+      return true;
+  }
+
   //todo add jwt token
   getDevice(deviceId : string){
     return Observable.interval(2000)

@@ -1,5 +1,6 @@
 import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 import {AuthService} from '../auth.service';
+import {User} from '../user';
 
 @Component({
   selector: 'app-dashboard',
