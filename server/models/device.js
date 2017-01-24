@@ -64,8 +64,12 @@ var DeviceSchema = new Schema({
   },
   activateTime:{
     type: Date,
-    reqruied : false
+    required : false
   },
+  userId:{
+    type: Schema.Types.ObjectId,
+    required: false
+  }
   devEUI: {
     type: String,
     unique: true
