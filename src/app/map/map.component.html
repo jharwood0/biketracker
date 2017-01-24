@@ -6,9 +6,9 @@
     </div>
   </div>
   <div class="panel-body">
-    <select class="form-control input-lg" (change)="getData($event.target.value)">
-		    <option value="0">Select Device</option>
-        <option *ngFor="let device of devices" [value]="device._id">
+    <select class="form-control input-lg" (change)="setDevice($event.target.value)">
+		    <option value="-1">Select Device</option>
+        <option *ngFor="let device of staticDevices; let i = index" [value]="i">
             {{device.devEUI}}
         </option>
 		</select>
@@ -16,7 +16,7 @@
     <div class="row">
       <sebm-google-map [styles]="mapStyle" [latitude]="focusLat" [longitude]="focusLng" [zoom]="zoom">
         <sebm-google-map-polyline>
-          <sebm-google-map-polyline-point *ngFor="let data of datas" [latitude]="data.latitude" [longitude]="data.longitude"></sebm-google-map-polyline-point>
+          <sebm-google-map-polyline-point *ngFor="let uplink of selectedUplinks" [latitude]="uplink.latitude" [longitude]="uplink.longitude"></sebm-google-map-polyline-point>
         </sebm-google-map-polyline>
       </sebm-google-map>
     </div>

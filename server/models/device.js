@@ -69,7 +69,7 @@ var DeviceSchema = new Schema({
   userId:{
     type: Schema.Types.ObjectId,
     required: false
-  }
+  },
   devEUI: {
     type: String,
     unique: true

@@ -1,21 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DevicesService } from '../devices.service';
-
+import { Device } from '../device';
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
 })
 export class DevicesComponent implements OnInit {
-  devices = [];
+  devices : Device[];
   constructor(private devicesService : DevicesService) {  }
 
   ngOnInit() {
-    this.devices = this.devicesService.getDevices();
-    /*this.devicesService.getDevices()
-        .subscribe(devices => {
-          this.devices = devices;
-        });*/
+    this.devicesService.devices.subscribe(devices =>{
+      if(devices != this.devices){
+        this.devices = devices
+      }
+    });
   }
 
   setActive(event : any){

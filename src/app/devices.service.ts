@@ -8,33 +8,26 @@ import { Device } from './device';
 
 @Injectable()
 export class DevicesService {
-
-  constructor(private http:Http, private authService: AuthService){
+  devices = Observable.interval(1000)
+                      .switchMap(() => this.http.get("/api/devices/"))
+                      .map(res => res.json());
+  constructor(private http:Http){
   }
 
-  getDevices(){
-    var userDevices = [];
-    for(let deviceId of this.authService.decodeToken().devices){
-      this.http.get('/api/devices/'+deviceId) //todo add jwt token
-          .map(res => res.json())
-          .subscribe(device => {
-            userDevices.push(device);
-          });
-    }
-    return userDevices;
+  addDevice(newDevice : Device){
+
   }
 
-  //todo add jwt token
-  deleteUplink(deviceId : string){
-      this.http.delete('/api/devices/'+deviceId+'/uplink')
-      return true;
+  removeDevice(deviceId : string){
+
   }
 
-  //todo add jwt token
-  getDevice(deviceId : string){
-    return Observable.interval(500)
-                     .switchMap(() => this.http.get("/api/devices/"+deviceId+"/"))
-                     .map(res => {return <Device> res.json()});
+  activateDevice(deviceId : string){
+
+  }
+
+  deactivateDevice(deviceId : string){
+
   }
 
 }
