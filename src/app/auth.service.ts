@@ -19,7 +19,7 @@ export class AuthService {
     var creds = "username=" + username + "&password=" + password;
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post('/auth/authenticate', creds, {headers : headers})
+    return this.http.post('/api/users/authenticate', creds, {headers : headers})
       .map((response: Response) => {
         // login successful if there's a jwt token in the response
         let token = response.json() && response.json().token;

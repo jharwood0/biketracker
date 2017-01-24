@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-
+var config = require('../config/database');
+var jwt = require('jwt-simple');
 var User = require('../models/user');
 var DeviceModels = require('../models/device');
 var Device = DeviceModels.Device;
@@ -17,8 +18,10 @@ GET - /api/devices <- returns all devices
 GET - /api/devices/:_id <- returns the device
 POST - /api/devices <- create device
 POST - /api/devices/:_id <- add uplink data
-
 POST - /api/authenticate/
+TODO:
+POST - /api/devices/:_id/activate
+POST - /api/devices/:_id/deactivate
 */
 
 router.get('/', function(req, res) {
@@ -75,6 +78,52 @@ router.route('/users/:id')
       msg: "Not Implemented"
     });
   });
+
+router.route('/users/authenticate')
+  .post(function(req, res) {
+    //auth user
+    User.findOne({
+      username: req.body.username
+    }, function(err, user) {
+      if (err) throw err;
+
+      if (!user) {
+        res.json({
+          success: false,
+          msg: 'Authentication failed, User not found'
+        });
+      } else {
+        user.comparePassword(req.body.password, function(err, isMatch) {
+          if (isMatch && !err) {
+            var token = jwt.encode(user, config.secret);
+            res.json({
+              success: true,
+              token: token,
+              user: user
+            });
+          } else {
+            return res.json({
+              success: false,
+              msg: 'Authenticaton failed, wrong password.'
+            });
+          }
+        })
+      }
+
+    })
+  });
+
+router.route('/users/getInfo')
+      .get(function(req, res){
+        if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+            var token = req.headers.authorization.split(' ')[1];
+            var decodedtoken = jwt.decode(token, config.secret);
+            return res.json({success: true, msg: 'hello '+decodedtoken.username});
+        }
+        else {
+            return res.json({success:false, msg: 'No header'});
+        }
+      });
 
 router.route('/devices')
   .get(function(req, res) {
@@ -158,86 +207,5 @@ router.route('/devices/:id')
         }
       });
     });
-
-/*
-router.route('/devices')
-    .post(function(req, res) {
-        var device = new Device(); // create a new instance of the Device model
-        device.devEUI = req.body.devEUI; // set the devices devEUI (comes from the request)
-        var location = new Location();
-        location.device = device._id;
-        location.longitude = -2;
-        location.latitude = -1;
-        location.save(function(errr){});
-
-        device.save(function(err) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.json({
-                    message: 'Device created!'
-                });
-            }
-        });
-    })
-    .get(function(req, res) {
-        Device.find(function(err, devices) {
-            if (err)
-                res.send(err);
-            res.json(devices);
-        });
-    });
-
-router.route('/devices/:device_id')
-    .get(function(req, res) {
-        Device.findById(req.params.device_id, function(err, device) {
-            if (err)
-                res.send(err);
-            res.json(device);
-        });
-    })
-    .put(function(req, res) {
-        Device.findById(req.params.devEUI, function(err, device) {
-            if (err)
-                res.send(err);
-            device.devEUI = req.body.devEUI;
-            device.save(function(err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'Device updated!'
-                });
-            });
-
-        });
-    })
-    .delete(function(req, res) {
-        Device.remove({
-            _id: req.params.devEUI
-        }, function(err, device) {
-            if (err)
-                res.send(err);
-            res.json({
-                message: 'Successfully deleted'
-            });
-        });
-});
-
-router.route('/devices/:device_id/datas')
-    .get(function(req, res){
-        Data.find({}).where('device', req.params.device_id).exec(function(err, locations){
-            res.json(locations);
-        });
-    });
-
-router.get('/datas', function(req, res) {
-    Data.find(function(err, locations){
-        if(err){
-            res.send(err);
-        }
-        res.json(locations);
-    });
-});
-*/
 
 module.exports = router;

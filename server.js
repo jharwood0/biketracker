@@ -5,7 +5,6 @@ const http = require('http');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const api = require('./server/routes/api');
-const auth = require('./server/routes/auth');
 const mongoose = require('mongoose');
 
 var config = require('./server/config/database');
@@ -29,7 +28,6 @@ mongoose.connection.on('open', function() {
 
   // Set our api routes
   app.use('/api', api);
-  app.use('/auth', auth);
 
   // Catch all other routes and return the index file
   app.get('*', (req, res) => {
