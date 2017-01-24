@@ -1,7 +1,8 @@
 import { Uplink } from './uplink';
 
 export class Device {
-    username : string;
-    email : string;
-    uplink : Uplink [];
+    name : string;
+    activateTime : Date;
+    devEUI : string;
+    uplink : Uplink[];
 }

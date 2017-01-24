@@ -19,7 +19,8 @@ GET - /api/devices/:_id <- returns the device
 POST - /api/devices <- create device
 POST - /api/devices/:_id <- add uplink data
 POST - /api/authenticate/
-TODO:
+
+NOTE: somehow need to find a way to trigger a send to the hardware device
 POST - /api/devices/:_id/activate
 POST - /api/devices/:_id/deactivate
 */

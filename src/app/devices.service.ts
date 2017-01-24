@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { AuthService } from './auth.service';
 
+import { Device } from './device';
 
 @Injectable()
 export class DevicesService {
@@ -33,7 +34,7 @@ export class DevicesService {
   getDevice(deviceId : string){
     return Observable.interval(500)
                      .switchMap(() => this.http.get("/api/devices/"+deviceId+"/"))
-                     .map(res => res.json());
+                     .map(res => {return <Device> res.json()});
   }
 
 }
