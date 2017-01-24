@@ -58,6 +58,14 @@ var UplinkSchema = new Schema({
 var Uplink = mongoose.model('Uplink', UplinkSchema);
 
 var DeviceSchema = new Schema({
+  name:{
+    type: String,
+    unique: false
+  },
+  activateTime:{
+    type: Date,
+    reqruied : false
+  },
   devEUI: {
     type: String,
     unique: true

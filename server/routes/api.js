@@ -188,24 +188,61 @@ router.route('/devices/:id')
       });
     });
   });
-  router.route('/devices/:id/uplink')
-    .delete(function(req, res) {
-      Device.findById(req.params.id, function(err, device) {
-        if (err) {
-          res.send(err);
-        } else {
-          device.uplink = []
-          device.save(function(err, device) {
-            if (err) {
-              res.send(err);
-            } else {
-              res.json({
-                msg: "Successful"
-              });
-            }
-          });
-        }
-      });
+router.route('/devices/:id/uplink')
+  .delete(function(req, res) {
+    Device.findById(req.params.id, function(err, device) {
+      if (err) {
+        res.send(err);
+      } else {
+        device.uplink = []
+        device.save(function(err, device) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json({
+              msg: "Successful"
+            });
+          }
+        });
+      }
     });
-
+  });
+router.route('/devices/:id/activate')
+  .post(function(req, res) {
+    Device.findById(req.params.id, function(err, device) {
+      if (err) {
+        res.send(err);
+      } else {
+        device.activateTime = Date.now();
+        device.save(function(err, device) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json({
+              msg: "Successful"
+            });
+          }
+        });
+      }
+    });
+});
+router.route('/devices/:id/deactivate')
+  .post(function(req, res) {
+    Device.findById(req.params.id, function(err, device) {
+      if (err) {
+        res.send(err);
+      } else {
+        device.activateTime = null;
+        device.save(function(err, device) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json({
+              msg: "Successful"
+            });
+          }
+        });
+      }
+    });
+});
 module.exports = router;
