@@ -9,6 +9,7 @@ import { DevicesService } from '../devices.service';
 export class MapComponent implements OnInit {
   datas: any[];
   devices: any[];
+  activeDevices: any[];
   defaultFocusLat : number = 52.561928;
   defaultFocusLng : number = -1.464854;
   focusLat: number = this.defaultFocusLat;
@@ -22,6 +23,12 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.devices = this.devicesService.getDevices();
+    this.activeDevices = [];
+    for(let device of this.devices){
+      //if(device.isActive){
+        this.activeDevices.push(device);
+      //}
+    }
   }
 
   getData(deviceId) {

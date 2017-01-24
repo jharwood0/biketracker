@@ -16,11 +16,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let device of devices">
+          <tr *ngFor="let device of devices; let i = index">
             <td>{{device._id}}</td>
             <td>{{device.devEUI}}</td>
-            <td><span class="label label-success">TODO: Status</span></td>
-            <td><button type="button" class="btn btn-primary">Start Monitoring</button></td>
+            <td><span class="label label-success">Monitoring</span></td>
+            <td><button type="button" class="btn btn-warning" id={{i}} (click)="setActive($event)">Stop Monitoring</button></td>
           </tr>
         </tbody>
       </table>

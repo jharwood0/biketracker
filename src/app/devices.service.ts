@@ -31,7 +31,7 @@ export class DevicesService {
 
   //todo add jwt token
   getDevice(deviceId : string){
-    return Observable.interval(2000)
+    return Observable.interval(500)
                      .switchMap(() => this.http.get("/api/devices/"+deviceId+"/"))
                      .map(res => res.json());
   }

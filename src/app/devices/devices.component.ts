@@ -18,4 +18,12 @@ export class DevicesComponent implements OnInit {
         });*/
   }
 
+  setActive(event : any){
+    let target = event.target || event.srcElement || event.currentTarget;
+    let idAttr = target.attributes.id;
+    let id = idAttr.nodeValue;
+    console.log(id);
+    console.log(this.devices[id]);
+  }
+
 }
