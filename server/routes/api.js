@@ -244,6 +244,7 @@ router.route('/devices/:id/activate')
         res.send(err);
       } else {
         device.activateTime = Date.now();
+        device.uplink = []; /* TEMP remove all old data TODO - don't do this*/
         device.save(function(err, device) {
           if (err) {
             res.send(err);
@@ -263,6 +264,7 @@ router.route('/devices/:id/deactivate')
         res.send(err);
       } else {
         device.activateTime = null;
+        device.uplink = []; /* TEMP remove all old data TODO - don't do this*/
         device.save(function(err, device) {
           if (err) {
             res.send(err);

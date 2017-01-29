@@ -19,8 +19,10 @@
           <tr *ngFor="let device of devices; let i = index">
             <td>{{device._id}}</td>
             <td>{{device.devEUI}}</td>
-            <td><span class="label label-success">Monitoring</span></td>
-            <td><button type="button" class="btn btn-warning" id={{i}} (click)="setActive($event)">Stop Monitoring</button></td>
+            <td *ngIf="device.activateTime != null"><span class="label label-success">Monitoring</span></td>
+            <td *ngIf="device.activateTime === null"><span class="label label-danger">Not Monitoring</span></td>
+            <td *ngIf="device.activateTime != null"><button type="button" class="btn btn-primary" id={{i}} (click)="deactivateDevice($event)">Stop Monitoring</button></td>
+            <td *ngIf="device.activateTime === null"><button type="button" class="btn btn-primary" id={{i}} (click)="activateDevice($event)">Start Monitoring</button></td>
           </tr>
         </tbody>
       </table>

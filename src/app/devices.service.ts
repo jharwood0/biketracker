@@ -7,13 +7,14 @@ import { Device } from './device';
 
 @Injectable()
 export class DevicesService {
-  devices : Observable<any>; //TODO fix this?
+  devices : Observable<Device[]>;
   constructor(private http: Http, private authService : AuthService) {
     let headers = new Headers({ 'Authorization': 'Bearer ' + this.authService.token});
     let options = new RequestOptions({headers:headers});
-    this.devices = Observable.interval(5000)
+    this.devices = Observable.interval(1000)
       .switchMap(() => this.http.get("/api/devices/", options))
-      .map(res => res.json());
+      .map(res => res.json())
+      .share(); /* stops re execution of get request for multiple subscribers */
   }
 
   addDevice(newDevice: Device) {
@@ -26,15 +27,21 @@ export class DevicesService {
   }
 
   removeDevice(deviceId: string) {
-
+    console.log("Not implemented");
   }
 
   activateDevice(deviceId: string) {
-
+    let headers = new Headers({ 'Authorization': 'Bearer ' + this.authService.token });
+    let options = new RequestOptions({headers:headers});
+    return this.http.post("/api/devices/"+deviceId+"/activate", options)
+                    .map((res:Response) => res.json());
   }
 
   deactivateDevice(deviceId: string) {
-
+    let headers = new Headers({ 'Authorization': 'Bearer ' + this.authService.token });
+    let options = new RequestOptions({headers:headers});
+    return this.http.post("/api/devices/"+deviceId+"/deactivate", options)
+                    .map((res:Response) => res.json());
   }
 
 }

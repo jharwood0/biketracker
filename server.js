@@ -79,14 +79,18 @@ mongoose.connection.on('open', function() {
           'devEUI': msg.devEUI
         }, function(err, device) {
           if (device != null) {
-            device.uplink.push(uplink);
-            device.save(function(err) {
-              if (err) {
-                console.log('[DEBUG]', err);
-              } else {
-                //console.log('[INFO]', "Succeeded!");
-              }
-            });
+            if(device.activateTime === null){
+              console.log('[INFO]', 'A device is sending data that is not activated...');
+            }else{
+              device.uplink.push(uplink);
+              device.save(function(err) {
+                if (err) {
+                  console.log('[DEBUG]', err);
+                } else {
+                  //console.log('[INFO]', "Succeeded!");
+                }
+              });
+            }
           }else{
             console.log('[INFO]', 'A device is sending data that does not exist on front-end...');
             /*var device = new Device();

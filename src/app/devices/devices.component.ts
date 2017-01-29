@@ -18,12 +18,26 @@ export class DevicesComponent implements OnInit {
     });
   }
 
-  setActive(event : any){
+  activateDevice(event : any){
     let target = event.target || event.srcElement || event.currentTarget;
     let idAttr = target.attributes.id;
     let id = idAttr.nodeValue;
-    console.log(id);
-    console.log(this.devices[id]);
+    this.devicesService.activateDevice(this.devices[id]._id)
+    .subscribe(result => {
+      console.log("Done!");
+    });
+
+
+  }
+
+  deactivateDevice(event : any){
+    let target = event.target || event.srcElement || event.currentTarget;
+    let idAttr = target.attributes.id;
+    let id = idAttr.nodeValue;
+    this.devicesService.deactivateDevice(this.devices[id]._id)
+    .subscribe(result => {
+      console.log("Done!");
+    });
   }
 
 }
