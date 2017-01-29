@@ -74,12 +74,12 @@ mongoose.connection.on('open', function() {
       client.on('uplink', function(msg) {
         var uplink = new Uplink(msg.fields);
         // get device and see if it exists
-        console.log('[INFO]', 'Looking for ', msg.devEUI);
+        //console.log('[INFO]', 'Looking for ', msg.devEUI);
         Device.findOne({
           'devEUI': msg.devEUI
         }, function(err, device) {
           if (device == null) {
-            console.log('[INFO]', 'Could not find devEUI...');
+            //console.log('[INFO]', 'Could not find devEUI...');
             var device = new Device();
             device.devEUI = msg.devEUI;
             device.uplink = [];
@@ -91,7 +91,7 @@ mongoose.connection.on('open', function() {
             if (err) {
               console.log('[DEBUG]', err);
             } else {
-              console.log('[INFO]', "Succeeded!");
+              //console.log('[INFO]', "Succeeded!");
             }
           })
         });

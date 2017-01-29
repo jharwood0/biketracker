@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 
 import {AuthGuardService} from './auth-guard.service';
 import { LogoutComponent } from './logout/logout.component';
+import { DeviceCreatorComponent } from './device-creator/device-creator.component';
 
 // Define the routes
 const ROUTES = [
@@ -49,7 +50,8 @@ const ROUTES = [
     MapComponent,
     DashboardComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    DeviceCreatorComponent
   ],
   imports: [
     BrowserModule,
