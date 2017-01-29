@@ -13,10 +13,6 @@ var UserSchema = new Schema({
       unique: true,
       required: true
     },
-    devices:[{
-      type: Schema.Types.ObjectId,
-      required: true
-    }],
     password: {
         type: String,
         required: true
