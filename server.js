@@ -78,22 +78,23 @@ mongoose.connection.on('open', function() {
         Device.findOne({
           'devEUI': msg.devEUI
         }, function(err, device) {
-          if (device == null) {
-            //console.log('[INFO]', 'Could not find devEUI...');
-            var device = new Device();
+          if (device != null) {
+            device.uplink.push(uplink);
+            device.save(function(err) {
+              if (err) {
+                console.log('[DEBUG]', err);
+              } else {
+                //console.log('[INFO]', "Succeeded!");
+              }
+            });
+          }else{
+            console.log('[INFO]', 'A device is sending data that does not exist on front-end...');
+            /*var device = new Device();
             device.devEUI = msg.devEUI;
             device.uplink = [];
             device.uplink.push(uplink);
-            device.save(function(err) {});
+            device.save(function(err) {});*/
           }
-          device.uplink.push(uplink);
-          device.save(function(err) {
-            if (err) {
-              console.log('[DEBUG]', err);
-            } else {
-              //console.log('[INFO]', "Succeeded!");
-            }
-          })
         });
       });
     });

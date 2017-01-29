@@ -137,9 +137,7 @@ router.route('/devices')
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         var token = req.headers.authorization.split(' ')[1];
         try{
-          console.log(token);
           var decodedtoken = jwt.decode(token, config.secret);
-          console.log("User = "+decodedtoken._id);
           user = decodedtoken._id;
           Device.find({"userId":user}, function(err, devices){
             if (err) {
@@ -158,9 +156,7 @@ router.route('/devices')
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         var token = req.headers.authorization.split(' ')[1];
         try{
-          console.log(token);
           var decodedtoken = jwt.decode(token, config.secret);
-          console.log("User = "+decodedtoken._id);
           user = decodedtoken._id;
           if (!req.body.devEUI) {
             res.send({
@@ -228,7 +224,6 @@ router.route('/devices/:id/uplink')
       if (err || device === null) {
         res.send(err);
       } else {
-        console.log(device);
         device.uplink = [];
         device.save(function(err, device) {
           if (err) {
