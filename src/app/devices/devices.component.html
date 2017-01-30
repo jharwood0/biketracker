@@ -10,14 +10,14 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>id</th>
+            <th>Name</th>
             <th>DevEUI</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let device of devices; let i = index">
-            <td>{{device._id}}</td>
+            <td>{{device.name}}</td>
             <td>{{device.devEUI}}</td>
             <td *ngIf="device.activateTime != null"><span class="label label-success">Monitoring</span></td>
             <td *ngIf="device.activateTime === null"><span class="label label-danger">Not Monitoring</span></td>
