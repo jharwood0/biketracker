@@ -1,8 +1,6 @@
 # Biketracker
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.22-1.
-
-This project uses express to serve both the API and the frontend UI.
+This project uses express.js to serve both the API and the frontend UI.
 
 ## !Depreciated!
 The purpose of this repository is to demo the source code of Biketracker at the end of iteration 2 of the thesis. A newer, rewritten code base was created during iteration 3, featured in the following repositories:
